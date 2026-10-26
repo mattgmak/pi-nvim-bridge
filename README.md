@@ -243,7 +243,7 @@ a prior value because pi never owned the var).
 ┌─────────────────────── pi process ───────────────────────┐
 │  bridge extension   live AutocompleteProvider (captured) │
 │  PI_NVIM_BRIDGE = { transport, path, token, … }          │
-│  Unix socket  (/tmp/pi-nvim-bridge-<pid>.sock, 0600)     │
+│  Unix socket  (/tmp/pi-nb-<8 hex>.sock, 0600)            │
 └────────────────────────────┬─────────────────────────────┘
                   JSON-RPC over socket │ getSuggestions / applyCompletion
                                        ▼
@@ -273,7 +273,7 @@ The descriptor is a single-line JSON object:
 ```jsonc
 {
   "transport": "unix",
-  "path": "/tmp/pi-nvim-bridge-<pid>.sock",
+  "path": "/tmp/pi-nb-<8 hex>.sock",
   "token": "<32-byte hex>",
   "pid": 12345,
   "cwd": "/your/project",

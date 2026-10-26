@@ -594,7 +594,9 @@ export function startBridge(ctx: ExtensionContext): void {
 	stopBridge(); // idempotent teardown of any prior server (reload/new/resume/fork re-entry)
 
 	token = randomUUID().replace(/-/g, "").slice(0, 32); // 32 lowercase hex chars (PRD §12)
-	socketPath = join(tmpdir(), `pi-nvim-bridge-${randomUUID()}.sock`);
+	// Short name: macOS caps sun_path at 104 bytes, and a 36-char UUID pushes the
+	// full path past it, so vim.uv cannot connect (ENOENT) although the file exists.
+	socketPath = join(tmpdir(), `pi-nb-${randomUUID().slice(0, 8)}.sock`);
 	server = __deps.createServer((sock) => onConnection(sock));
 	// Defensive: an unhandled 'error' event (e.g. EADDRINUSE, EACCES binding tmpdir, EMFILE)
 	// on a net.Server THROWS and would crash the process (Node EventEmitter contract —

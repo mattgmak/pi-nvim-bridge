@@ -56,8 +56,13 @@ test("startBridge (mocked): createServer + chmodSync(_,0o600) invoked, token 32-
 		// socket path shape (unique, under tmpdir, .sock extension)
 		assert.match(
 			listenArg ?? "",
-			/pi-nvim-bridge-[0-9a-f-]+\.sock$/,
-			"listen() must be called with a unique pi-nvim-bridge-*.sock path",
+			/pi-nb-[0-9a-f]{8}\.sock$/,
+			"listen() must be called with a unique pi-nb-*.sock path",
+		);
+		// macOS sun_path holds 104 bytes; past it vim.uv connect fails with ENOENT.
+		assert.ok(
+			(listenArg ?? "").length < 104,
+			"socket path must fit macOS sun_path (104 bytes)",
 		);
 		// chmod called with EXACTLY the listen path and 0o600
 		assert.ok(chmodCall, "chmodSync must be invoked");
